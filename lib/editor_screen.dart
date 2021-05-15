@@ -14,9 +14,6 @@ class EditorScreen extends StatefulWidget {
 }
 
 class _EditorScreenState extends State<EditorScreen> {
-  /*Future<http.Response> fetchSite() {
-    return http.get(Uri.http('127.0.0.1:8000', 'site/24'));
-  }*/
   Future<Site> _site;
 
   Future<Site> fetchSite() async {
@@ -50,7 +47,9 @@ class _EditorScreenState extends State<EditorScreen> {
                   future: _site,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      return Text(snapshot.data.title);
+                      //return Text(snapshot.data.title);
+                      //return Text(snapshot.data.sid.toString());
+                      return Text(snapshot.data.elements[0].text);
                     } else if (snapshot.hasError) {
                       return Text('Load error');
                     }
