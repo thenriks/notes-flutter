@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'site.dart';
 
 class SiteComponent extends StatefulWidget {
   final String type;

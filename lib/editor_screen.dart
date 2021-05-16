@@ -58,11 +58,7 @@ class _EditorScreenState extends State<EditorScreen> {
                       comps.add(Text(snapshot.data.title));
 
                       for (var x in snapshot.data.elements) {
-                        if (x.type == 'text') {
-                          comps.add(SiteComponent(type: 'text', text: x.text));
-                        } else if (x.type == 'link') {
-                          comps.add(SiteComponent(type: 'link', url: x.url));
-                        }
+                        comps.add(x);
                       }
 
                       return Column(

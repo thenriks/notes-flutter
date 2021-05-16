@@ -1,22 +1,11 @@
 import 'package:flutter/cupertino.dart';
-
-class SiteElement {
-  String type;
-  String text;
-  String url;
-
-  SiteElement({
-    @required this.type,
-    this.text,
-    this.url,
-  });
-}
+import 'site_component.dart';
 
 class Site {
   String title;
   final int sid;
   bool isOpen;
-  var elements = <SiteElement>[];
+  var elements = <SiteComponent>[];
 
   Site({
     @required this.title,
@@ -26,13 +15,13 @@ class Site {
   });
 
   factory Site.fromJson(Map<String, dynamic> json) {
-    var elements = <SiteElement>[];
+    var elements = <SiteComponent>[];
 
     for (var x in json['elements']) {
       if (x['type'] == 'text') {
-        elements.add(SiteElement(type: 'text', text: x['text']));
+        elements.add(SiteComponent(type: 'text', text: x['text']));
       } else if (x['type'] == 'link') {
-        elements.add(SiteElement(type: 'link', url: x['url']));
+        elements.add(SiteComponent(type: 'link', url: x['url']));
       }
     }
 
