@@ -27,8 +27,9 @@ class Site {
     var elements = <SiteElement>[];
 
     for (var x in json['elements']) {
-      //print(x['type']);
-      elements.add(SiteElement(type: 'text', text: x['text']));
+      if (x['type'] == 'text') {
+        elements.add(SiteElement(type: 'text', text: x['text']));
+      }
     }
 
     return Site(

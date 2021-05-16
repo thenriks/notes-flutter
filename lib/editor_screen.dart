@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:notes_flutter/site_component.dart';
 import 'site.dart';
 
 class EditorScreen extends StatefulWidget {
@@ -49,7 +50,17 @@ class _EditorScreenState extends State<EditorScreen> {
                     if (snapshot.hasData) {
                       //return Text(snapshot.data.title);
                       //return Text(snapshot.data.sid.toString());
-                      return Text(snapshot.data.elements[0].text);
+                      var comps = <SiteComponent>[];
+
+                      for (var x in snapshot.data.elements) {
+                        comps.add(SiteComponent(text: x.text));
+                      }
+
+                      return Column(
+                        children: comps,
+                      );
+
+                      //return Text(snapshot.data.elements[0].text);
                     } else if (snapshot.hasError) {
                       return Text('Load error');
                     }
