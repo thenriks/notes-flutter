@@ -3,10 +3,12 @@ import 'package:flutter/cupertino.dart';
 class SiteElement {
   String type;
   String text;
+  String url;
 
   SiteElement({
     @required this.type,
     this.text,
+    this.url,
   });
 }
 
@@ -29,6 +31,8 @@ class Site {
     for (var x in json['elements']) {
       if (x['type'] == 'text') {
         elements.add(SiteElement(type: 'text', text: x['text']));
+      } else if (x['type'] == 'link') {
+        elements.add(SiteElement(type: 'link', url: x['url']));
       }
     }
 

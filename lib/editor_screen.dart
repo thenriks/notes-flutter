@@ -15,10 +15,15 @@ class EditorScreen extends StatefulWidget {
 }
 
 class _EditorScreenState extends State<EditorScreen> {
+  static const BACKEND_URL = '127.0.0.1:8000';
   Future<Site> _site;
 
   Future<Site> fetchSite() async {
-    final response = await http.get(Uri.http('127.0.0.1:8000', 'site/24'));
+    final siteId =
+        await http.get(Uri.http(BACKEND_URL, 'site_id/' + widget.token));
+    print('siteId: ' + siteId.body);
+    final response =
+        await http.get(Uri.http(BACKEND_URL, 'site/' + siteId.body));
 
     if (response.statusCode == 200) {
       return Site.fromJson(jsonDecode(response.body));
@@ -48,19 +53,21 @@ class _EditorScreenState extends State<EditorScreen> {
                   future: _site,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      //return Text(snapshot.data.title);
-                      //return Text(snapshot.data.sid.toString());
-                      var comps = <SiteComponent>[];
+                      var comps = <Widget>[];
+                      comps.add(Text('/site/' + snapshot.data.sid.toString()));
+                      comps.add(Text(snapshot.data.title));
 
                       for (var x in snapshot.data.elements) {
-                        comps.add(SiteComponent(text: x.text));
+                        if (x.type == 'text') {
+                          comps.add(SiteComponent(type: 'text', text: x.text));
+                        } else if (x.type == 'link') {
+                          comps.add(SiteComponent(type: 'link', url: x.url));
+                        }
                       }
 
                       return Column(
                         children: comps,
                       );
-
-                      //return Text(snapshot.data.elements[0].text);
                     } else if (snapshot.hasError) {
                       return Text('Load error');
                     }
