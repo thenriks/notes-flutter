@@ -57,20 +57,22 @@ class _EditorScreenState extends State<EditorScreen> {
                       comps.add(Text(snapshot.data.title));
 
                       for (var x in snapshot.data.elements) {
+                        /*comps.add(Container(
+                          child: x,
+                        ));*/
                         comps.add(
-                          Row(children: [x, Text('X')]),
+                          Row(
+                            children: [
+                              Expanded(child: x),
+                              Icon(Icons.highlight_remove)
+                            ],
+                          ),
                         );
-                        //comps.add(x);
                       }
 
-                      return Center(
-                        child: Column(
-                          children: comps,
-                        ),
-                      );
-                      /*return Column(
+                      return Column(
                         children: comps,
-                      );*/
+                      );
                     } else if (snapshot.hasError) {
                       return Text('Load error');
                     }
