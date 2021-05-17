@@ -2,5 +2,5 @@
 
 Flutter client for note/link sharing site.
 
-Backend: [https://github.com/thenriks/notes-pub]
+Backend: https://github.com/thenriks/notes-pub
 

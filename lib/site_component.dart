@@ -4,8 +4,10 @@ class SiteComponent extends StatefulWidget {
   final String type;
   final String text;
   final String url;
+  final String id;
 
-  SiteComponent({Key key, this.type, this.text, this.url}) : super(key: key);
+  SiteComponent({Key key, this.type, this.text, this.url, this.id})
+      : super(key: key);
 
   @override
   _SiteComponentState createState() => _SiteComponentState();
@@ -18,5 +20,7 @@ class _SiteComponentState extends State<SiteComponent> {
     } else if (widget.type == 'link') {
       return Text(widget.url);
     }
+
+    return Text('Invalid component');
   }
 }
