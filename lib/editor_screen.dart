@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:notes_flutter/post_editor.dart';
 import 'site.dart';
 
 class EditorScreen extends StatefulWidget {
@@ -48,7 +49,8 @@ class _EditorScreenState extends State<EditorScreen> {
           child: Column(
             children: [
               Text(widget.token),
-              FutureBuilder<Site>(
+              //FutureBuilder<Site>(
+              FutureBuilder(
                   future: _site,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
@@ -78,7 +80,7 @@ class _EditorScreenState extends State<EditorScreen> {
               Expanded(
                 child: Align(
                   alignment: Alignment.bottomCenter,
-                  child: Text('Bottom'),
+                  child: PostEditor(),
                 ),
               )
             ],
