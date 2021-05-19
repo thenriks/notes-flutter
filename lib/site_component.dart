@@ -4,8 +4,10 @@ class SiteComponent extends StatefulWidget {
   final String type;
   final String text;
   final String url;
+  final String id;
 
-  SiteComponent({Key key, this.type, this.text, this.url}) : super(key: key);
+  SiteComponent({Key key, this.type, this.text, this.url, this.id})
+      : super(key: key);
 
   @override
   _SiteComponentState createState() => _SiteComponentState();
@@ -14,9 +16,25 @@ class SiteComponent extends StatefulWidget {
 class _SiteComponentState extends State<SiteComponent> {
   Widget build(BuildContext context) {
     if (widget.type == 'text') {
-      return Text(widget.text);
+      return Row(
+        children: [
+          Expanded(
+            child: Text(widget.text),
+          ),
+          Icon(Icons.highlight_remove)
+        ],
+      );
     } else if (widget.type == 'link') {
-      return Text(widget.url);
+      return Row(
+        children: [
+          Expanded(
+            child: Text(widget.url),
+          ),
+          Icon(Icons.highlight_remove)
+        ],
+      );
     }
+
+    return Text('Invalid component');
   }
 }

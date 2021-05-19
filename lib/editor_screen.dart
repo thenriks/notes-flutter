@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:notes_flutter/site_component.dart';
 import 'site.dart';
 
 class EditorScreen extends StatefulWidget {
@@ -57,9 +56,15 @@ class _EditorScreenState extends State<EditorScreen> {
                       comps.add(Text('/site/' + snapshot.data.sid.toString()));
                       comps.add(Text(snapshot.data.title));
 
+                      var elems = <Widget>[];
                       for (var x in snapshot.data.elements) {
-                        comps.add(x);
+                        elems.add(x);
                       }
+
+                      comps.add(ListView(
+                        shrinkWrap: true,
+                        children: elems,
+                      ));
 
                       return Column(
                         children: comps,
@@ -69,7 +74,13 @@ class _EditorScreenState extends State<EditorScreen> {
                     }
 
                     return CircularProgressIndicator();
-                  })
+                  }),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Text('Bottom'),
+                ),
+              )
             ],
           ),
         ),
