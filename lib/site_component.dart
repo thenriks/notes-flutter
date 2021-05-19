@@ -16,9 +16,23 @@ class SiteComponent extends StatefulWidget {
 class _SiteComponentState extends State<SiteComponent> {
   Widget build(BuildContext context) {
     if (widget.type == 'text') {
-      return Text(widget.text);
+      return Row(
+        children: [
+          Expanded(
+            child: Text(widget.text),
+          ),
+          Icon(Icons.highlight_remove)
+        ],
+      );
     } else if (widget.type == 'link') {
-      return Text(widget.url);
+      return Row(
+        children: [
+          Expanded(
+            child: Text(widget.url),
+          ),
+          Icon(Icons.highlight_remove)
+        ],
+      );
     }
 
     return Text('Invalid component');
