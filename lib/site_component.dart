@@ -21,7 +21,12 @@ class _SiteComponentState extends State<SiteComponent> {
           Expanded(
             child: Text(widget.text),
           ),
-          Icon(Icons.highlight_remove)
+          GestureDetector(
+            onTap: () {
+              print('id: ' + widget.id);
+            },
+            child: Icon(Icons.highlight_remove),
+          )
         ],
       );
     } else if (widget.type == 'link') {
@@ -30,7 +35,12 @@ class _SiteComponentState extends State<SiteComponent> {
           Expanded(
             child: Text(widget.url),
           ),
-          Icon(Icons.highlight_remove)
+          GestureDetector(
+            onTap: () {
+              print('id: ' + widget.id);
+            },
+            child: Icon(Icons.highlight_remove),
+          )
         ],
       );
     }
