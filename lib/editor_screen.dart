@@ -40,17 +40,33 @@ class _EditorScreenState extends State<EditorScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return DefaultTabController(
+      initialIndex: 0,
+      length: 4,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Edit'),
+          title: const Text('Edit site'),
+          bottom: const TabBar(
+            tabs: <Widget>[
+              Tab(
+                icon: Icon(Icons.preview),
+              ),
+              Tab(
+                icon: Icon(Icons.mode_comment),
+              ),
+              Tab(
+                icon: Icon(Icons.insert_link),
+              ),
+              Tab(
+                icon: Icon(Icons.info_outline),
+              ),
+            ],
+          ),
         ),
-        body: Center(
-          child: Column(
-            children: [
-              Text(widget.token),
-              //FutureBuilder<Site>(
-              FutureBuilder(
+        body: TabBarView(
+          children: <Widget>[
+            Center(
+              child: FutureBuilder(
                   future: _site,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
@@ -63,13 +79,9 @@ class _EditorScreenState extends State<EditorScreen> {
                         elems.add(x);
                       }
 
-                      comps.add(ListView(
+                      return ListView(
                         shrinkWrap: true,
                         children: elems,
-                      ));
-
-                      return Column(
-                        children: comps,
                       );
                     } else if (snapshot.hasError) {
                       return Text('Load error');
@@ -77,14 +89,19 @@ class _EditorScreenState extends State<EditorScreen> {
 
                     return CircularProgressIndicator();
                   }),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: PostEditor(),
-                ),
-              )
-            ],
-          ),
+            ),
+            Center(
+              child: PostEditor(
+                token: widget.token,
+              ),
+            ),
+            Center(
+              child: Text('Isert link'),
+            ),
+            Center(
+              child: Text('Info'),
+            ),
+          ],
         ),
       ),
     );

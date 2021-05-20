@@ -18,7 +18,6 @@ class _StartScreenState extends State<StartScreen> {
 
   void _editNote() {
     print(tokenTextController.text);
-    //Navigator.pushNamed(context, '/editor');
     Navigator.push(
       context,
       MaterialPageRoute(
