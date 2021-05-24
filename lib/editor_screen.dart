@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:notes_flutter/post_editor.dart';
+import 'package:notes_flutter/link_editor.dart';
 import 'site.dart';
 
 class EditorScreen extends StatefulWidget {
@@ -17,6 +18,7 @@ class EditorScreen extends StatefulWidget {
 class _EditorScreenState extends State<EditorScreen> {
   static const BACKEND_URL = '127.0.0.1:8000';
   Future<Site> _site;
+  String id = "";
 
   Future<Site> fetchSite() async {
     final siteId =
@@ -26,9 +28,32 @@ class _EditorScreenState extends State<EditorScreen> {
         await http.get(Uri.http(BACKEND_URL, 'site/' + siteId.body));
 
     if (response.statusCode == 200) {
-      return Site.fromJson(jsonDecode(response.body));
+      print('Site loaded');
+      setState(() {
+        id = siteId.body;
+      });
+      return Site.fromJson(jsonDecode(response.body), _removeElement);
     } else {
       throw Exception("Couldn't load site");
+    }
+  }
+
+  void _removeElement(String id) async {
+    final response = await http.post(
+      Uri.http(BACKEND_URL, 'remove'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'token': widget.token,
+        'id': id,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      reloadSite();
+    } else {
+      throw Exception('Couldn\'t remove element.');
     }
   }
 
@@ -36,6 +61,13 @@ class _EditorScreenState extends State<EditorScreen> {
   void initState() {
     super.initState();
     _site = fetchSite();
+  }
+
+  void reloadSite() {
+    //print('reloadSite()');
+    setState(() {
+      _site = fetchSite();
+    });
   }
 
   @override
@@ -70,9 +102,9 @@ class _EditorScreenState extends State<EditorScreen> {
                   future: _site,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      var comps = <Widget>[];
+                      /*var comps = <Widget>[];
                       comps.add(Text('/site/' + snapshot.data.sid.toString()));
-                      comps.add(Text(snapshot.data.title));
+                      comps.add(Text(snapshot.data.title));*/
 
                       var elems = <Widget>[];
                       for (var x in snapshot.data.elements) {
@@ -93,13 +125,26 @@ class _EditorScreenState extends State<EditorScreen> {
             Center(
               child: PostEditor(
                 token: widget.token,
+                updateSite: this.reloadSite,
               ),
             ),
             Center(
-              child: Text('Isert link'),
+              child: LinkEditor(
+                token: widget.token,
+                updateSite: this.reloadSite,
+              ),
             ),
-            Center(
-              child: Text('Info'),
+            Column(
+              children: [
+                Text('Token: ' + widget.token),
+                Text('url: site/' + id),
+                ElevatedButton(
+                  onPressed: () {
+                    print('Close');
+                  },
+                  child: Text('Close'),
+                )
+              ],
             ),
           ],
         ),
