@@ -14,14 +14,16 @@ class Site {
     @required this.elements,
   });
 
-  factory Site.fromJson(Map<String, dynamic> json) {
+  factory Site.fromJson(Map<String, dynamic> json, rf) {
     var elements = <SiteComponent>[];
 
     for (var x in json['elements']) {
       if (x['type'] == 'text') {
-        elements.add(SiteComponent(id: x['id'], type: 'text', text: x['text']));
+        elements.add(SiteComponent(
+            id: x['id'], type: 'text', text: x['text'], remove: rf));
       } else if (x['type'] == 'link') {
-        elements.add(SiteComponent(id: x['id'], type: 'link', url: x['url']));
+        elements.add(SiteComponent(
+            id: x['id'], type: 'link', url: x['url'], remove: rf));
       }
     }
 

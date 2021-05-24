@@ -5,8 +5,9 @@ class SiteComponent extends StatefulWidget {
   final String text;
   final String url;
   final String id;
+  final Function(String) remove;
 
-  SiteComponent({Key key, this.type, this.text, this.url, this.id})
+  SiteComponent({Key key, this.type, this.text, this.url, this.id, this.remove})
       : super(key: key);
 
   @override
@@ -23,7 +24,8 @@ class _SiteComponentState extends State<SiteComponent> {
           ),
           GestureDetector(
             onTap: () {
-              print('id: ' + widget.id);
+              //print('id: ' + widget.id);
+              widget.remove(widget.id);
             },
             child: Icon(Icons.highlight_remove),
           )
