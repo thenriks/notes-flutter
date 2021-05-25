@@ -5,9 +5,17 @@ class SiteComponent extends StatefulWidget {
   final String text;
   final String url;
   final String id;
+  final bool isOpen;
   final Function(String) remove;
 
-  SiteComponent({Key key, this.type, this.text, this.url, this.id, this.remove})
+  SiteComponent(
+      {Key key,
+      this.type,
+      this.text,
+      this.url,
+      this.id,
+      this.isOpen,
+      this.remove})
       : super(key: key);
 
   @override
@@ -22,13 +30,14 @@ class _SiteComponentState extends State<SiteComponent> {
           Expanded(
             child: Text(widget.text),
           ),
-          GestureDetector(
-            onTap: () {
-              //print('id: ' + widget.id);
-              widget.remove(widget.id);
-            },
-            child: Icon(Icons.highlight_remove),
-          )
+          if (widget.isOpen)
+            GestureDetector(
+              onTap: () {
+                //print('id: ' + widget.id);
+                widget.remove(widget.id);
+              },
+              child: Icon(Icons.highlight_remove),
+            )
         ],
       );
     } else if (widget.type == 'link') {
@@ -37,12 +46,14 @@ class _SiteComponentState extends State<SiteComponent> {
           Expanded(
             child: Text(widget.url),
           ),
-          GestureDetector(
-            onTap: () {
-              print('id: ' + widget.id);
-            },
-            child: Icon(Icons.highlight_remove),
-          )
+          if (widget.isOpen)
+            GestureDetector(
+              onTap: () {
+                //print('id: ' + widget.id);
+                widget.remove(widget.id);
+              },
+              child: Icon(Icons.highlight_remove),
+            )
         ],
       );
     }

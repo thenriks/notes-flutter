@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:notes_flutter/post_editor.dart';
 import 'package:notes_flutter/link_editor.dart';
@@ -19,6 +20,7 @@ class _EditorScreenState extends State<EditorScreen> {
   static const BACKEND_URL = '127.0.0.1:8000';
   Future<Site> _site;
   String id = "";
+  bool isOpen = false;
 
   Future<Site> fetchSite() async {
     final siteId =
@@ -29,8 +31,11 @@ class _EditorScreenState extends State<EditorScreen> {
 
     if (response.statusCode == 200) {
       print('Site loaded');
+      var resBody = jsonDecode(response.body);
+
       setState(() {
         id = siteId.body;
+        isOpen = resBody['isOpen'];
       });
       return Site.fromJson(jsonDecode(response.body), _removeElement);
     } else {
@@ -54,6 +59,25 @@ class _EditorScreenState extends State<EditorScreen> {
       reloadSite();
     } else {
       throw Exception('Couldn\'t remove element.');
+    }
+  }
+
+  void _closeSite() async {
+    //print('closesite');
+    final response = await http.post(
+      Uri.http(BACKEND_URL, 'close_site'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'token': widget.token,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      reloadSite();
+    } else {
+      throw Exception('Couldn\'t close site.');
     }
   }
 
@@ -102,10 +126,6 @@ class _EditorScreenState extends State<EditorScreen> {
                   future: _site,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      /*var comps = <Widget>[];
-                      comps.add(Text('/site/' + snapshot.data.sid.toString()));
-                      comps.add(Text(snapshot.data.title));*/
-
                       var elems = <Widget>[];
                       for (var x in snapshot.data.elements) {
                         elems.add(x);
@@ -136,14 +156,36 @@ class _EditorScreenState extends State<EditorScreen> {
             ),
             Column(
               children: [
-                Text('Token: ' + widget.token),
-                Text('url: site/' + id),
-                ElevatedButton(
-                  onPressed: () {
-                    print('Close');
-                  },
-                  child: Text('Close'),
-                )
+                Text('Token'),
+                Row(
+                  children: [
+                    Text(widget.token),
+                    GestureDetector(
+                      onTap: () {
+                        Clipboard.setData(ClipboardData(text: widget.token));
+                      },
+                      child: Icon(Icons.content_copy),
+                    )
+                  ],
+                ),
+                Text('URL'),
+                Row(
+                  children: [
+                    Text('https://notes-nuxt.vercel.app/sites/' + id),
+                    GestureDetector(
+                      onTap: () {
+                        Clipboard.setData(ClipboardData(
+                            text: 'https://notes-nuxt.vercel.app/sites/' + id));
+                      },
+                      child: Icon(Icons.content_copy),
+                    )
+                  ],
+                ),
+                if (isOpen)
+                  ElevatedButton(
+                    onPressed: _closeSite,
+                    child: Text('Close'),
+                  )
               ],
             ),
           ],
