@@ -20,10 +20,18 @@ class Site {
     for (var x in json['elements']) {
       if (x['type'] == 'text') {
         elements.add(SiteComponent(
-            id: x['id'], type: 'text', text: x['text'], remove: rf));
+            id: x['id'],
+            type: 'text',
+            text: x['text'],
+            isOpen: json['isOpen'],
+            remove: rf));
       } else if (x['type'] == 'link') {
         elements.add(SiteComponent(
-            id: x['id'], type: 'link', url: x['url'], remove: rf));
+            id: x['id'],
+            type: 'link',
+            url: x['url'],
+            isOpen: json['isOpen'],
+            remove: rf));
       }
     }
 
