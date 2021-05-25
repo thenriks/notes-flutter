@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:notes_flutter/post_editor.dart';
 import 'package:notes_flutter/link_editor.dart';
@@ -155,8 +156,31 @@ class _EditorScreenState extends State<EditorScreen> {
             ),
             Column(
               children: [
-                Text('Token: ' + widget.token),
-                Text('https://notes-nuxt.vercel.app/sites/' + id),
+                Text('Token'),
+                Row(
+                  children: [
+                    Text(widget.token),
+                    GestureDetector(
+                      onTap: () {
+                        Clipboard.setData(ClipboardData(text: widget.token));
+                      },
+                      child: Icon(Icons.content_copy),
+                    )
+                  ],
+                ),
+                Text('URL'),
+                Row(
+                  children: [
+                    Text('https://notes-nuxt.vercel.app/sites/' + id),
+                    GestureDetector(
+                      onTap: () {
+                        Clipboard.setData(ClipboardData(
+                            text: 'https://notes-nuxt.vercel.app/sites/' + id));
+                      },
+                      child: Icon(Icons.content_copy),
+                    )
+                  ],
+                ),
                 if (isOpen)
                   ElevatedButton(
                     onPressed: _closeSite,

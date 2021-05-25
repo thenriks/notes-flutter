@@ -49,7 +49,8 @@ class _SiteComponentState extends State<SiteComponent> {
           if (widget.isOpen)
             GestureDetector(
               onTap: () {
-                print('id: ' + widget.id);
+                //print('id: ' + widget.id);
+                widget.remove(widget.id);
               },
               child: Icon(Icons.highlight_remove),
             )
