@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:notes_flutter/post_editor.dart';
 import 'package:notes_flutter/link_editor.dart';
 import 'site.dart';
+import 'globals.dart';
 
 class EditorScreen extends StatefulWidget {
   final String token;
@@ -17,17 +18,17 @@ class EditorScreen extends StatefulWidget {
 }
 
 class _EditorScreenState extends State<EditorScreen> {
-  static const BACKEND_URL = '127.0.0.1:8000';
+  //static const BACKEND_URL = '127.0.0.1:8000';
   Future<Site> _site;
   String id = "";
   bool isOpen = false;
 
   Future<Site> fetchSite() async {
-    final siteId =
-        await http.get(Uri.http(BACKEND_URL, 'site_id/' + widget.token));
+    final siteId = await http
+        .get(Uri.http(Globals.BACKEND_URL, 'site_id/' + widget.token));
     print('siteId: ' + siteId.body);
     final response =
-        await http.get(Uri.http(BACKEND_URL, 'site/' + siteId.body));
+        await http.get(Uri.http(Globals.BACKEND_URL, 'site/' + siteId.body));
 
     if (response.statusCode == 200) {
       print('Site loaded');
@@ -45,7 +46,7 @@ class _EditorScreenState extends State<EditorScreen> {
 
   void _removeElement(String id) async {
     final response = await http.post(
-      Uri.http(BACKEND_URL, 'remove'),
+      Uri.http(Globals.BACKEND_URL, 'remove'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -65,7 +66,7 @@ class _EditorScreenState extends State<EditorScreen> {
   void _closeSite() async {
     //print('closesite');
     final response = await http.post(
-      Uri.http(BACKEND_URL, 'close_site'),
+      Uri.http(Globals.BACKEND_URL, 'close_site'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -162,7 +163,11 @@ class _EditorScreenState extends State<EditorScreen> {
                     Text(widget.token),
                     GestureDetector(
                       onTap: () {
-                        Clipboard.setData(ClipboardData(text: widget.token));
+                        Clipboard.setData(ClipboardData(text: widget.token))
+                            .then((value) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(SnackBar(content: Text('Copied')));
+                        });
                       },
                       child: Icon(Icons.content_copy),
                     )
@@ -175,7 +180,12 @@ class _EditorScreenState extends State<EditorScreen> {
                     GestureDetector(
                       onTap: () {
                         Clipboard.setData(ClipboardData(
-                            text: 'https://notes-nuxt.vercel.app/sites/' + id));
+                                text: 'https://notes-nuxt.vercel.app/sites/' +
+                                    id))
+                            .then((value) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(SnackBar(content: Text('Copied')));
+                        });
                       },
                       child: Icon(Icons.content_copy),
                     )
