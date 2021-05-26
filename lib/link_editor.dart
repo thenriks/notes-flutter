@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'globals.dart';
 
 class LinkEditor extends StatefulWidget {
   final String token;
@@ -14,12 +15,12 @@ class LinkEditor extends StatefulWidget {
 }
 
 class _LinkEditorState extends State<LinkEditor> {
-  static const BACKEND_URL = '127.0.0.1:8000';
+  //static const BACKEND_URL = '127.0.0.1:8000';
   TextEditingController _linkController = new TextEditingController();
 
   Future<String> addLink() async {
     final response = await http.post(
-      Uri.http(BACKEND_URL, 'add_link'),
+      Uri.http(Globals.BACKEND_URL, 'add_link'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -52,9 +53,17 @@ class _LinkEditorState extends State<LinkEditor> {
           ),
           ElevatedButton(
               onPressed: () {
-                //print(widget.token);
-                //print(_linkController.text);
-                addLink();
+                if (_linkController.text.startsWith('http://') ||
+                    _linkController.text.startsWith('https://')) {
+                  addLink().then((value) {
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text('Link added')));
+                    _linkController.text = '';
+                  });
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Please enter valid link')));
+                }
               },
               child: Text('Send'))
         ],

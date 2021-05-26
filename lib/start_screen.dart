@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'editor_screen.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'globals.dart';
 
 class StartScreen extends StatefulWidget {
   @override
@@ -9,12 +10,12 @@ class StartScreen extends StatefulWidget {
 }
 
 class _StartScreenState extends State<StartScreen> {
-  static const BACKEND_URL = '127.0.0.1:8000';
+  //static const BACKEND_URL = '127.0.0.1:8000';
   TextEditingController tokenTextController = new TextEditingController();
 
   void _newSite() async {
     final response = await http.post(
-      Uri.http(BACKEND_URL, 'new'),
+      Uri.http(Globals.BACKEND_URL, 'new'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

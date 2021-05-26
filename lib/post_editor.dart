@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'globals.dart';
 
 class PostEditor extends StatefulWidget {
   final String token;
@@ -14,12 +15,12 @@ class PostEditor extends StatefulWidget {
 }
 
 class _PostEditorState extends State<PostEditor> {
-  static const BACKEND_URL = '127.0.0.1:8000';
+  //static const BACKEND_URL = '127.0.0.1:8000';
   TextEditingController _postController = new TextEditingController();
 
   Future<String> addText() async {
     final response = await http.post(
-      Uri.http(BACKEND_URL, 'add_text'),
+      Uri.http(Globals.BACKEND_URL, 'add_text'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -54,9 +55,11 @@ class _PostEditorState extends State<PostEditor> {
           ),
           ElevatedButton(
               onPressed: () {
-                addText();
-                //print(widget.token);
-                //print(_postController.text);
+                addText().then((value) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text('Message added')));
+                  _postController.text = '';
+                });
               },
               child: Text('Send'))
         ],
