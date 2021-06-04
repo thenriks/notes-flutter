@@ -1,5 +1,9 @@
 # notes_flutter
 
+![Text editor](assets/screen1.png)
+![Site view](assets/screen2.png)
+![Info view](assets/screen3.png)
+
 Flutter client for note/link sharing site. Requires backend to work.
 
 Demo: https://notesfl.web.app
