@@ -6,8 +6,6 @@
 
 Flutter client for note/link sharing site. Requires backend to work.
 
-Demo: https://notesfl.web.app
-
 Backend: https://github.com/thenriks/notes-pub
 
 
